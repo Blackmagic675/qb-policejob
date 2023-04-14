@@ -40,3 +40,8 @@ Police Job for QB-Core Framework :police_officer:
 - Multi departmetn optios
 - Option for peds
 - More Config options
+
+
+## ToDo
+- Secur veh spawning events
+- fix heli.lua
