@@ -41,8 +41,7 @@ Police Job for QB-Core Framework :police_officer:
 - More Config options
 
 ## Ox_target
-[ox_target](https://github.com/overextended/ox_target/releases)
-if u want to use ox_target then u need to chang somthings on ox_target.
+if u want to use [ox_target](https://github.com/overextended/ox_target/releases) then u need to chang somthings on ox_target.
 
 qb-target.lua/ line 18
 
