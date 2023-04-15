@@ -26,7 +26,6 @@ Police Job for QB-Core Framework :police_officer:
 - [qb-garages](https://github.com/qbcore-framework/qb-garages) - For the vehicle spawner
 - [qb-clothing](https://github.com/qbcore-framework/qb-clothing) - For the locker room
 - [qb-phone](https://github.com/qbcore-framework/qb-phone) - For the MEOS app and notifications etc.
-- [qb-log](https://github.com/qbcore-framework/qb-logs) - (Deprecated) - For logging certain events
 - [qb-smallresources](https://github.com/qbcore-framework/qb-smallresources) (Replaces qb-log) - qb-log was added to qb-smallresources
 - [qb-menu](https://github.com/qbcore-framework/qb-menu) - For the vehicle menus
 - [qb-input](https://github.com/qbcore-framework/qb-input) - For accessing evidence stashes
@@ -41,7 +40,69 @@ Police Job for QB-Core Framework :police_officer:
 - Option for peds
 - More Config options
 
+## Ox_target
+[ox_target](https://github.com/overextended/ox_target/releases)
+if u want to use ox_target then u need to chang somthings on ox_target.
+
+qb-target.lua/ line 18
+
+Before
+```lua
+ v.groups = v.job
+```
+
+After
+```lua
+v.groups = v.job or v.jobType
+```
+
+framework/qb.lua replace the folowing event
+"PlayerHasGroups" whit the provided code below
+```lua
+function PlayerHasGroups(filter)
+    local _type = type(filter)
+
+    if _type == 'string' then
+        local job = playerData.job.name == filter
+        local jobType = playerData.job.type == filter
+        local gang = playerData.gang.name == filter
+        local citizenId = playerData.citizenid == filter
+
+        if job or gang or citizenId or jobType then
+            return true
+        end
+    elseif _type == 'table' then
+        local tabletype = table.type(filter)
+
+        if tabletype == 'hash' then
+            for name, grade in pairs(filter) do
+                local job = playerData.job.name == name
+                local jobType = playerData.job.type == name
+                local gang = playerData.gang.name == name
+                local citizenId = playerData.citizenid == name
+
+                if job and grade <= playerData.job.grade.level or gang and grade <= playerData.gang.grade.level or citizenId or jobType  then
+                    return true
+                end
+            end
+        elseif tabletype == 'array' then
+            for i = 1, #filter do
+                local name = filter[i]
+                local job = playerData.job.name == name
+                local jobType = playerData.job.type == name
+                local gang = playerData.gang.name == name
+                local citizenId = playerData.citizenid == name
+
+                if job or gang or citizenId or jobType then
+                    return true
+                end
+            end
+        end
+    end
+end
+```
 
 ## ToDo
 - Secur veh spawning events
 - fix heli.lua
+- Add gread for garage
