@@ -238,7 +238,7 @@ Config.Items = {
             },
             type = "weapon",
             slot = 1,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'}, -- for all leo jobs set {'leo'}, for intivigial jobs {'police', 'sast', 'sheriff'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [2] = {
@@ -250,7 +250,7 @@ Config.Items = {
             },
             type = "weapon",
             slot = 2,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [3] = {
@@ -265,7 +265,7 @@ Config.Items = {
             },
             type = "weapon",
             slot = 3,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [4] = {
@@ -281,7 +281,7 @@ Config.Items = {
             },
             type = "weapon",
             slot = 4,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [5] = {
@@ -297,7 +297,7 @@ Config.Items = {
             },
             type = "weapon",
             slot = 5,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [6] = {
@@ -307,7 +307,7 @@ Config.Items = {
             info = {},
             type = "weapon",
             slot = 6,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [7] = {
@@ -317,7 +317,7 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 7,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [8] = {
@@ -327,7 +327,7 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 8,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [9] = {
@@ -337,7 +337,7 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 9,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [10] = {
@@ -347,7 +347,7 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 10,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [11] = {
@@ -357,7 +357,7 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 11,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [12] = {
@@ -367,7 +367,7 @@ Config.Items = {
             info = {},
             type = "weapon",
             slot = 12,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [13] = {
@@ -377,7 +377,7 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 13,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [14] = {
@@ -387,7 +387,7 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 14,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [15] = {
@@ -397,7 +397,7 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 15,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [16] = {
@@ -407,7 +407,7 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 16,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [17] = {
@@ -417,7 +417,7 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 17,
-            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobs = {'leo'},
             authorizedJobGrades = {0,1, 2, 3, 4, 5}
         }
     }
