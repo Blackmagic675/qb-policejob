@@ -8,6 +8,15 @@ local inArmoury = false
 local inHelicopter = false
 local inImpound = false
 local inGarage = false
+local pedstable = {}
+
+AddEventHandler('onResourceStop', function (resource)
+    if resource == GetCurrentResourceName() then
+        for k,v in pairs(pedstable) do 
+            DeletePed(v)
+        end
+    end
+end)
 
 local function loadAnimDict(dict) -- interactions, job,
     while (not HasAnimDictLoaded(dict)) do
@@ -132,7 +141,7 @@ end)
 local function IsArmoryWhitelist() -- being removed
     local retval = false
 
-    if QBCore.Functions.GetPlayerData().job.type == 'loe' then
+    if QBCore.Functions.GetPlayerData().job.type == 'leo' then
         retval = true
     end
     return retval
@@ -271,31 +280,37 @@ RegisterNetEvent('police:client:CheckStatus', function()
 end)
 
 RegisterNetEvent("police:client:CopterMenu", function(data)
-    local heli = Config.Helicopters
+    local heli = Config.Helicopters[QBCore.Functions.GetPlayerData().job.grade.level]
     local copterlist = {}
     copterlist[#copterlist + 1] = { 
         isMenuHeader = true,
-        header = 'Heli Garage',
+        header = Lang:t("menu.heli_garage"),
         icon = 'fa-solid fa-shield'
     }
-    for k,v in pairs(heli) do 
-        copterlist[#copterlist + 1] = { 
-            header = k,
-            txt = 'Nice walking flight',
-            icon = 'fa-solid fa-helicopter',
-            params = {
-                event = 'police:client:TakeOutCopter', 
-                args = {
-                    currentSelection = data.spawn,
-                    model = v,
+    if heli == nil then
+        QBCore.Functions.Notify(Lang:t("error.not_outhereized_veh"), "error", 5000)
+    else
+        for k,v in pairs(heli) do 
+            copterlist[#copterlist + 1] = { 
+                header = k:upper(),
+                txt = Lang:t("menu.heli_garage_txt"),
+                icon = 'fa-solid fa-helicopter',
+                params = {
+                    event = 'police:client:TakeOutCopter', 
+                    args = {
+                        currentSelection = data.spawn,
+                        model = v,
+                    }
                 }
             }
-        }
+        end
+        exports['qb-menu']:openMenu(copterlist) 
     end
-    exports['qb-menu']:openMenu(copterlist) 
 end)
 
 RegisterNetEvent("police:client:VehicleMenuHeader", function(data)
+    local base = Config.VehicleTable[QBCore.Functions.GetPlayerData().job.name]
+    local job = QBCore.Functions.GetPlayerData().job.name
     local Menu = {
         {
             header = Lang:t('menu.garage_title'),
@@ -303,27 +318,28 @@ RegisterNetEvent("police:client:VehicleMenuHeader", function(data)
             icon = "fas fa-warehouse",
         }
     }
-    for k,v in pairs(Config.VehicleTable) do
-        Menu[#Menu+1] = {
-            header = k:upper(),
-            txt = "Select category for vehicles",
-            icon = "fa-solid fa-shield",
-            params = {
-                event = "police:client:veh-category-selected",
-                args = {
-                    category = k,
-                    location = data.spawn,
+        for k,v in pairs(base) do
+            Menu[#Menu+1] = {
+                header = k:upper(),
+                txt = "Select category for vehicles",
+                icon = "fa-solid fa-shield",
+                params = {
+                    event = "police:client:veh-category-selected",
+                    args = {
+                        category = k,
+                        location = data.spawn,
+                    }
                 }
             }
-        }
+        exports['qb-menu']:openMenu(Menu)
     end
-    exports['qb-menu']:openMenu(Menu)
 end)
 
 RegisterNetEvent('police:client:veh-category-selected', function(data)
+    print(1)
     local newtable = data.category
-    local result = Config.VehicleTable[newtable]
-    if not result then return end
+    QBCore.Debug(newtable)
+    local result = Config.VehicleTable[QBCore.Functions.GetPlayerData().job.name][newtable][QBCore.Functions.GetPlayerData().job.grade.level]
     local Menu = {
         {
             header = Lang:t('menu.garage_title'),
@@ -331,21 +347,25 @@ RegisterNetEvent('police:client:veh-category-selected', function(data)
             icon = "fas fa-warehouse",
         }
     }
-    for k,v in pairs(result) do
-        Menu[#Menu+1] = {
-            header = v:upper(),
-            txt = "",
-            icon = "fa-solid fa-shield",
-            params = {
-                event = "police:client:TakeOutVehicle",
-                args = {
-                    currentSelection = data.location,
-                    model = v,
+    if result == nil then
+        QBCore.Functions.Notify(Lang:t('error.non_outhereized_veh'), 'error', 300)
+    else
+        for k,v in pairs(result) do
+            Menu[#Menu+1] = {
+                header = k:upper(),
+                txt = "",
+                icon = "fa-solid fa-shield",
+                params = {
+                    event = "police:client:TakeOutVehicle",
+                    args = {
+                        currentSelection = data.location,
+                        model = v,
+                    }
                 }
             }
-        }
+        end
+        exports['qb-menu']:openMenu(Menu)
     end
-    exports['qb-menu']:openMenu(Menu)
 end)
 
 RegisterNetEvent("police:client:ImpoundMenuHeader", function (data)
@@ -400,7 +420,7 @@ end)
 
 RegisterNetEvent("police:client:TakeOutCopter", function(data)
     local VehicleSpawnCoord = Config.Locations["helicopter"][data.currentSelection]["vehiclespawn"]
-    local plate = "POLICE".. tostring(math.random(000, 999))
+    local plate = Lang:t("police_plate").. tostring(math.random(000, 999))
 
     QBCore.Functions.SpawnVehicle(data.model, function(veh)
         SetVehicleNumberPlateText(veh, plate)
@@ -453,11 +473,11 @@ RegisterNetEvent('police:client:EvidenceStashDrawer', function(data)
             }
         }
     })
-    TriggerServerEvent("inventory:server:OpenInventory", "stash", Lang:t('info.current_evidence', {value2 = drawer.name}), {
+    TriggerServerEvent("inventory:server:OpenInventory", "stash", Lang:t('info.current_evidence', {value = currentEvidence, value2 = drawer.slot}), {
         maxweight = 4000000,
         slots = 500,
     })
-    TriggerEvent("inventory:client:SetCurrentStash", Lang:t('info.current_evidence', {value2 = drawer.name}))
+    TriggerEvent("inventory:client:SetCurrentStash", Lang:t('info.current_evidence', {value = currentEvidence, value2 = drawer.slot}))
 end)
 
 RegisterNetEvent('qb-policejob:ToggleDuty', function()
@@ -485,7 +505,7 @@ RegisterNetEvent('qb-police:client:openArmoury', function()
     local index = 1
     for _, armoryItem in pairs(Config.Items.items) do
         for i=1, #armoryItem.authorizedJobGrades do
-            if armoryItem.authorizedJobGrades[i] == PlayerJob.grade.level then
+            if armoryItem.authorizedJobs == PlayerJob.name or "leo" and armoryItem.authorizedJobGrades[i] == PlayerJob.grade.level then
                 authorizedItems.items[index] = armoryItem
                 authorizedItems.items[index].slot = index
                 index = index + 1
@@ -617,7 +637,7 @@ local function armoury()
     CreateThread(function()
         while true do
             Wait(0)
-            if inArmoury and PlayerJob.type == "loe" then
+            if inArmoury and PlayerJob.type == "leo" then
                 if PlayerJob.onduty then sleep = 5 end
                 if IsControlJustReleased(0, 38) then
                     TriggerEvent("qb-police:client:openArmoury")
@@ -699,6 +719,7 @@ if Config.UseTarget then
                     Wait(100)
                 end
                 DutyPed = CreatePed(0, Config.DutyPed, v.x, v.y, v.z-1.0, v.w, false, true)
+                table.insert(pedstable, DutyPed)
                 TaskStartScenarioInPlace(DutyPed, true)
                 FreezeEntityPosition(DutyPed, true)
                 SetEntityInvincible(DutyPed, true)
@@ -718,7 +739,7 @@ if Config.UseTarget then
                         type = "client",
                         event = "qb-policejob:ToggleDuty",
                         icon = "fas fa-sign-in-alt",
-                        label = "Duty On/Off",
+                        label = Lang:t("targeting.duty_lable"),
                         jobType = "leo",
                     },
                 },
@@ -740,7 +761,7 @@ if Config.UseTarget then
                         type = "client",
                         event = "qb-police:client:openStash",
                         icon = "fas fa-dungeon",
-                        label = "Open Personal Stash",
+                        label = Lang:t("targeting.stash_lable"),
                         jobType = "leo",
                     },
                 },
@@ -763,7 +784,7 @@ if Config.UseTarget then
                             type = "client",
                             event = "qb-police:client:openTrash",
                             icon = "fas fa-trash",
-                            label = "Open Trash",
+                            label = Lang:t("targeting.trash_lable"),
                             jobType = "leo",
                         },
                     },
@@ -786,7 +807,7 @@ if Config.UseTarget then
                         type = "client",
                         event = "qb-police:client:scanFingerPrint",
                         icon = "fas fa-fingerprint",
-                        label = "Open Fingerprint",
+                        label = Lang:t("targeting.fingerprint_lable"),
                         jobType = "leo",
                     },
                 },
@@ -802,6 +823,7 @@ if Config.UseTarget then
                     Wait(100)
                 end
                 ArmoryPed = CreatePed(0, Config.ArmoryPed, v.x, v.y, v.z-1.0, v.w, false, true)
+                table.insert(pedstable, ArmoryPed)
                 TaskStartScenarioInPlace(ArmoryPed, true)
                 FreezeEntityPosition(ArmoryPed, true)
                 SetEntityInvincible(ArmoryPed, true)
@@ -821,7 +843,7 @@ if Config.UseTarget then
                         type = "client",
                         event = "qb-police:client:openArmoury",
                         icon = "fas fa-swords",
-                        label = "Open Armory",
+                        label = Lang:t("targeting.armory_lable"),
                         jobType = "leo",
                     },
                 },
@@ -838,6 +860,7 @@ if Config.UseTarget then
                     Wait(100)
                 end
                 ImpoundPed = CreatePed(0, Config.ImpoundPed, v.vehped.x, v.vehped.y, v.vehped.z-1.0, v.vehped.w, false, true)
+                table.insert(pedstable, ImpoundPed)
                 TaskStartScenarioInPlace(ImpoundPed, true)
                 FreezeEntityPosition(ImpoundPed, true)
                 SetEntityInvincible(ImpoundPed, true)
@@ -857,7 +880,7 @@ if Config.UseTarget then
                         type = "client",
                         event = "police:client:ImpoundMenuHeader",
                         icon = "fas fa-swords",
-                        label = "Open Impound",
+                        label = Lang:t("targeting.impound_lable"),
                         jobType = "leo",
                         spawn = k
 
@@ -875,6 +898,7 @@ if Config.UseTarget then
                     Wait(100)
                 end
                 HeliPed = CreatePed(0, Config.HeliPed, v.vehped.x, v.vehped.y, v.vehped.z-1.0, v.vehped.w, false, true)
+                table.insert(pedstable, HeliPed)
                 TaskStartScenarioInPlace(HeliPed, true)
                 FreezeEntityPosition(HeliPed, true)
                 SetEntityInvincible(HeliPed, true)
@@ -892,7 +916,7 @@ if Config.UseTarget then
                     options = {
                         {
                             icon = 'fa-solid fa-helicopter',
-                            label = 'Open Heli Garage',
+                            label = Lang:t("targeting.garage_out_lable"),
                             type = "client",
                             event = "police:client:CopterMenu",
                             jobType = "leo",                      
@@ -901,7 +925,7 @@ if Config.UseTarget then
                         },
                         {
                             icon = 'fa-solid fa-car',
-                            label = 'Store Vehicle',
+                            label = Lang:t("targeting.garage_in_lable"),
                             type = "client",
                             event  = "police:client:returnveh",
                             jobType = "leo",
@@ -921,6 +945,7 @@ if Config.UseTarget then
                     Wait(100)
                 end
                 GaragePed = CreatePed(0, Config.GaragePed, v.vehped.x, v.vehped.y, v.vehped.z-1.0, v.vehped.w, false, true)
+                table.insert(pedstable, GaragePed)
                 TaskStartScenarioInPlace(GaragePed, true)
                 FreezeEntityPosition(GaragePed, true)
                 SetEntityInvincible(GaragePed, true)
@@ -938,7 +963,7 @@ if Config.UseTarget then
                 options = {
                     {
                         icon = 'fa-solid fa-warehouse',
-                        label = 'Open Garage',
+                        label = Lang:t("targeting.garage_out_lable"),
                         type = "client",
                         event = "police:client:VehicleMenuHeader",
                         jobType = "leo",
@@ -946,7 +971,7 @@ if Config.UseTarget then
                     },
                     {
                         icon = 'fa-solid fa-car',
-                        label = 'Store Vehicle',
+                        label = Lang:t("targeting.garage_in_lable"),
                         type = "client",
                         event  = "police:client:returnveh",
                         jobType = "leo",
@@ -963,6 +988,7 @@ if Config.UseTarget then
                     Wait(100)
                 end
                 EvidencePed = CreatePed(0, Config.EvidencePed, v.x, v.y, v.z-1.0, v.w, false, true)
+                table.insert(pedstable, EvidencePed)
                 TaskStartScenarioInPlace(EvidencePed, true)
                 FreezeEntityPosition(EvidencePed, true)
                 SetEntityInvincible(EvidencePed, true)
@@ -982,7 +1008,7 @@ if Config.UseTarget then
                         type = "client",
                         event = "police:client:EvidenceStashDrawer",
                         icon = "fas fa-swords",
-                        label = "Open Evidenc",
+                        label = Lang:t("targeting.evidence_lable"),
                         jobType = "leo",
                     },
                 },
@@ -1039,7 +1065,7 @@ else
     stashCombo:onPlayerInOut(function(isPointInside, _, _)
         if isPointInside then
             inStash = true
-            if PlayerJob.type == 'loe' and PlayerJob.onduty then
+            if PlayerJob.type == 'leo' and PlayerJob.onduty then
                 exports['qb-core']:DrawText(Lang:t('info.stash_enter'), 'left')
                 stash()
             end
@@ -1066,7 +1092,7 @@ else
         trashCombo:onPlayerInOut(function(isPointInside)
             if isPointInside then
                 inTrash = true
-                if PlayerJob.type == 'loe' and PlayerJob.onduty then
+                if PlayerJob.type == 'leo' and PlayerJob.onduty then
                     exports['qb-core']:DrawText(Lang:t('info.trash_enter'),'left')
                     trash()
                 end
@@ -1092,7 +1118,7 @@ else
     fingerprintCombo:onPlayerInOut(function(isPointInside)
         if isPointInside then
             inFingerprint = true
-            if PlayerJob.type == 'loe' and PlayerJob.onduty then
+            if PlayerJob.type == 'leo' and PlayerJob.onduty then
                 exports['qb-core']:DrawText(Lang:t('info.scan_fingerprint'),'left')
                 fingerprint()
             end
@@ -1118,7 +1144,7 @@ else
     armouryCombo:onPlayerInOut(function(isPointInside)
         if isPointInside then
             inArmoury = true
-            if PlayerJob.type == 'loe' and PlayerJob.onduty then
+            if PlayerJob.type == 'leo' and PlayerJob.onduty then
                 exports['qb-core']:DrawText(Lang:t('info.enter_armory'),'left')
                 armoury()
             end
@@ -1188,7 +1214,7 @@ CreateThread(function()
     helicopterCombo:onPlayerInOut(function(isPointInside)
         if isPointInside then
             inHelicopter = true
-            if PlayerJob.type == 'loe' and PlayerJob.onduty then
+            if PlayerJob.type == 'leo' and PlayerJob.onduty then
                 if IsPedInAnyVehicle(PlayerPedId(), false) then
                     exports['qb-core']:HideText()
                     exports['qb-core']:DrawText(Lang:t('info.store_heli'), 'left')
@@ -1221,7 +1247,7 @@ CreateThread(function()
     impoundCombo:onPlayerInOut(function(isPointInside, point)
         if isPointInside then
             inImpound = true
-            if PlayerJob.type == 'loe' and PlayerJob.onduty then
+            if PlayerJob.type == 'leo' and PlayerJob.onduty then
                 if IsPedInAnyVehicle(PlayerPedId(), false) then
                     exports['qb-core']:DrawText(Lang:t('info.impound_veh'), 'left')
                     impound()
@@ -1270,7 +1296,7 @@ CreateThread(function()
     garageCombo:onPlayerInOut(function(isPointInside, point)
         if isPointInside then
             inGarage = true
-            if PlayerJob.type == 'loe' and PlayerJob.onduty then
+            if PlayerJob.type == 'leo' and PlayerJob.onduty then
                 if IsPedInAnyVehicle(PlayerPedId(), false) then
                     exports['qb-core']:DrawText(Lang:t('info.store_veh'), 'left')
 		    garage()
