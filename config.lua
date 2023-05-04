@@ -148,20 +148,29 @@ Config.SecurityCameras = {
 }
 
 Config.Helicopters = {
-    ['POLMAV'] = "POLMAV",
-    ['SRU - Buzzard'] = "sru2"
+   [3] = {
+        ['POLMAV'] = "POLMAV",
+        ['SRU - Buzzard'] = "sru2"
+    },
 }
 
 Config.VehicleTable = {
-	["L.S.P.D"] = {
-        ['L.S.P.D - Crown Vic'] = "police",
-        ['2t40 - Q'] = "2t40"
-	},
-
-	["B.C.S.O"] = {
-	    ['B.C.S.O - Crown Vic'] = "sheriff"
-	},
-
+    ["police"] = { --job name
+        ["L.S.P.D"] = {
+            [1] = { --job grade
+                ['L.S.P.D - Crown Vic'] = "police", -- lable, veh name
+                ['2t40 - Q'] = "2t40"
+            }, 
+            [2] = {
+                ['2t40 - Q'] = "2t40"
+            },
+        },
+    },
+    ["sheriff"] = {
+            ["B.C.S.O"] = {
+            [0] = {['B.C.S.O - Crown Vic'] = "sheriff"}
+        },
+    },
 }
 
 Config.WhitelistedVehicles = {}
@@ -229,7 +238,8 @@ Config.Items = {
             },
             type = "weapon",
             slot = 1,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [2] = {
             name = "weapon_stungun",
@@ -240,7 +250,8 @@ Config.Items = {
             },
             type = "weapon",
             slot = 2,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [3] = {
             name = "weapon_pumpshotgun",
@@ -254,7 +265,8 @@ Config.Items = {
             },
             type = "weapon",
             slot = 3,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [4] = {
             name = "weapon_smg",
@@ -269,7 +281,8 @@ Config.Items = {
             },
             type = "weapon",
             slot = 4,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [5] = {
             name = "weapon_carbinerifle",
@@ -284,7 +297,8 @@ Config.Items = {
             },
             type = "weapon",
             slot = 5,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [6] = {
             name = "weapon_nightstick",
@@ -293,7 +307,8 @@ Config.Items = {
             info = {},
             type = "weapon",
             slot = 6,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [7] = {
             name = "pistol_ammo",
@@ -302,7 +317,8 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 7,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [8] = {
             name = "smg_ammo",
@@ -311,7 +327,8 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 8,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [9] = {
             name = "shotgun_ammo",
@@ -320,7 +337,8 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 9,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [10] = {
             name = "rifle_ammo",
@@ -329,7 +347,8 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 10,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [11] = {
             name = "handcuffs",
@@ -338,7 +357,8 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 11,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [12] = {
             name = "weapon_flashlight",
@@ -347,7 +367,8 @@ Config.Items = {
             info = {},
             type = "weapon",
             slot = 12,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [13] = {
             name = "empty_evidence_bag",
@@ -356,7 +377,8 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 13,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [14] = {
             name = "police_stormram",
@@ -365,7 +387,8 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 14,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [15] = {
             name = "armor",
@@ -374,7 +397,8 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 15,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [16] = {
             name = "radio",
@@ -383,7 +407,8 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 16,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0, 1, 2, 3, 4, 5}
         },
         [17] = {
             name = "heavyarmor",
@@ -392,7 +417,8 @@ Config.Items = {
             info = {},
             type = "item",
             slot = 17,
-            authorizedJobGrades = {0, 1, 2, 3, 4}
+            authorizedJobs = {'police', 'sast', 'sheriff'},
+            authorizedJobGrades = {0,1, 2, 3, 4, 5}
         }
     }
 }
@@ -436,3 +462,49 @@ Config.VehicleSettings = {
 		["livery"] = 1,
     }
 }
+
+--DutyBlip function
+
+function Config.CreateDutyBlips(playerId, playerLabel, playerJob, playerLocation)
+    local DutyBlips = {}
+    local ped = GetPlayerPed(playerId)
+    local blip = GetBlipFromEntity(ped)
+    if not DoesBlipExist(blip) then
+        if NetworkIsPlayerActive(playerId) then
+            blip = AddBlipForEntity(ped)
+        else
+            blip = AddBlipForCoord(playerLocation.x, playerLocation.y, playerLocation.z)
+        end
+
+        if playerJob == "police" then -- job name
+            Color = 38 --the bilps color
+        elseif
+           playerJob == "bcso" then
+            Color = 52
+        elseif
+           playerJob == "saspr" then
+            Color = 31
+        elseif
+        playerJob == "ambulance" then
+            Color =  1
+        else
+            Color = 5
+        end
+
+        SetBlipSprite(blip, 1)
+        ShowHeadingIndicatorOnBlip(blip, true)
+        SetBlipRotation(blip, math.ceil(playerLocation.w))
+        SetBlipScale(blip, 1.0)
+       SetBlipColour(blip, Color)
+        SetBlipAsShortRange(blip, true)
+        BeginTextCommandSetBlipName('STRING')
+        AddTextComponentString(playerLabel)
+        EndTextCommandSetBlipName(blip)
+        DutyBlips[#DutyBlips+1] = blip
+    end
+
+    if GetBlipFromEntity(PlayerPedId()) == blip then
+        -- Ensure we remove our own blip.
+        RemoveBlip(blip)
+    end
+end
