@@ -466,7 +466,6 @@ Config.VehicleSettings = {
 --DutyBlip function
 
 function Config.CreateDutyBlips(playerId, playerLabel, playerJob, playerLocation)
-    local DutyBlips = {}
     local ped = GetPlayerPed(playerId)
     local blip = GetBlipFromEntity(ped)
     if not DoesBlipExist(blip) then
@@ -500,10 +499,9 @@ function Config.CreateDutyBlips(playerId, playerLabel, playerJob, playerLocation
         BeginTextCommandSetBlipName('STRING')
         AddTextComponentString(playerLabel)
         EndTextCommandSetBlipName(blip)
-        DutyBlips[#DutyBlips+1] = blip
     end
 
-    if GetBlipFromEntity(PlayerPedId()) == blip then
+     if GetBlipFromEntity(PlayerPedId()) == blip then
         -- Ensure we remove our own blip.
         RemoveBlip(blip)
     end
