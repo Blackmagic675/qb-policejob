@@ -187,6 +187,17 @@ local Translations = {
         remove_object = 'Removing object..',
         impound = 'Impounding Vehicle..',
     },
+    targeting = {
+        duty_lable = 'Go On/Off duty',
+        armory_lable = 'Open Armory',
+        garage_out_lable = 'Open Garage',
+        garage_in_lable = 'Store Vehicle',
+        stash_lable = 'Open Locker', --personal
+        fingerprint_lable = 'Get Fingerprint',
+        trash_lable = 'Open Trash',
+        impound_lable = 'Open Impound Garage',
+        evidence_lable = 'Open Evidence',
+    },
 }
 
 Lang = Lang or Locale:new({
